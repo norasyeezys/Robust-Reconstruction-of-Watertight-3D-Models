@@ -29,7 +29,7 @@ class Chunk(Generic[V]):
 
     def __init__(self, index: Vec3i, size: int, dtype: Optional[Union[np.dtype, Type[V]]] = None,
                  fill_value: Optional[V] = None):
-        self._index: Vec3i = np.asarray(index, dtype=np.int)
+        self._index: Vec3i = np.asarray(index, dtype=int)
         self._size = size
         self._dtype = np.dtype(dtype)
         self._fill_value = self._dtype.base.type(fill_value)  # If this fails, dtype is an unsupported complex type
@@ -83,7 +83,7 @@ class Chunk(Generic[V]):
         return not self._is_filled
 
     def inner(self, pos: Vec3i) -> np.ndarray:
-        return np.asarray(pos, dtype=np.int) % self._size
+        return np.asarray(pos, dtype=int) % self._size
 
     def get_pos(self, pos: Vec3i) -> V:
         return self.to_array()[tuple(self.inner(pos))]
@@ -246,7 +246,7 @@ class Chunk(Generic[V]):
             if self.is_filled():
                 c.set_fill(self._value)
             else:
-                u, v, w = np.asarray(offset, dtype=np.int) * split_size
+                u, v, w = np.asarray(offset, dtype=int) * split_size
                 tmp = self._value[u: u + split_size, v: v + split_size, w: w + split_size]
                 if repeats == 1:
                     val = tmp.copy()
@@ -625,7 +625,7 @@ class ChunkGrid(Generic[V]):
         return Chunk(index, self._chunk_size, self._dtype, self._fill_value)
 
     def chunk_index(self, pos: Vec3i) -> Vec3i:
-        res = np.asarray(pos, dtype=np.int) // self._chunk_size
+        res = np.asarray(pos, dtype=int) // self._chunk_size
         assert res.shape == (3,)
         return res
 
@@ -976,8 +976,8 @@ class ChunkGrid(Generic[V]):
                 return self.chunks.get(index, default=None)
 
         _shape = np.asarray(shape)
-        chunks = np.full(shape, None, dtype=np.object)
-        offset = _shape // 2 if offset is None else np.asarray(offset, dtype=np.int)
+        chunks = np.full(shape, None, dtype=object)
+        offset = _shape // 2 if offset is None else np.asarray(offset, dtype=int)
         assert offset.shape == (3,)
 
         # Corner/Edge case handling
@@ -1274,7 +1274,7 @@ class ChunkGrid(Generic[V]):
         return block
 
     def block_to_array(self, chunks, fill_value: Optional[V] = None):
-        chunks = np.atleast_3d(np.asarray(chunks, dtype=np.object))
+        chunks = np.atleast_3d(np.asarray(chunks, dtype=object))
         cs = self._chunk_size
         fill_value = self._fill_value if fill_value is None else fill_value
         dtype = self._dtype
