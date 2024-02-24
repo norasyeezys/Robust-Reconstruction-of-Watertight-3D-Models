@@ -43,18 +43,18 @@ class IndexDict(Generic[T]):
         """ Returns the min and max index of all contained indices"""
         if asarray:
             # noinspection PyTypeChecker
-            return np.asarray(self._minmax.safe(self._data.keys), dtype=np.int)
+            return np.asarray(self._minmax.safe(self._data.keys), dtype=int)
         return self._minmax.safe(self._data.keys)
 
     def size(self) -> Vec3i:
         if self._data:
             min, max = self.minmax(True)
             return max - min + 1
-        return np.zeros(3, dtype=np.int)
+        return np.zeros(3, dtype=int)
 
     @classmethod
     def index(cls, item: IndexUnion) -> Index:
-        item = np.asarray(item, dtype=np.int)
+        item = np.asarray(item, dtype=int)
         if item.shape != (3,):
             raise IndexError(f"Invalid index {item}")
         return tuple(item)
@@ -63,7 +63,7 @@ class IndexDict(Generic[T]):
         return self._data.get(self.index(index), default)
 
     def __getitem_from_numpy(self, item: np.ndarray, ignore_empty=True) -> Union[T, List[T]]:
-        item = np.asarray(item, dtype=np.int)
+        item = np.asarray(item, dtype=int)
         if item.shape == (3,):
             return self._data[tuple(item)]
         else:
@@ -101,7 +101,7 @@ class IndexDict(Generic[T]):
             return list(self.sliced(item))
         if isinstance(item, tuple):
             try:
-                index = np.asarray(item, dtype=np.int)
+                index = np.asarray(item, dtype=int)
                 if index.shape == (3,):
                     return self._data[self.index(item)]
                 raise KeyError(f"invalid key {item}")
