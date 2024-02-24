@@ -12,7 +12,7 @@ CHUNK_DIRECTIONS = np.array([(1, 0, 0),
                              (0, 1, 0),
                              (0, -1, 0),
                              (0, 0, 1),
-                             (0, 0, -1)], dtype=np.int)
+                             (0, 0, -1)], dtype=int)
 
 # Static face slices
 __CSNONE = slice(None)
