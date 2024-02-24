@@ -142,7 +142,7 @@ def propagate_normals(iterations: int, values: ChunkGrid[Vec3f], positions: Chun
 
     # Find indices where to operate
     indices_offset = positions.chunks.minmax()[0]
-    indices = [tuple(i) for i in np.array(list(np.ndindex(*positions.chunks.size())), dtype=np.int) + indices_offset]
+    indices = [tuple(i) for i in np.array(list(np.ndindex(*positions.chunks.size())), dtype=int) + indices_offset]
     indices = set(i for i in indices if mask.ensure_chunk_at_index(i, insert=False).any())
 
     for i in range(iterations):
